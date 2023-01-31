@@ -1,5 +1,5 @@
 [package]
-name = "return-funds-on-leaving"
+name = "mtk-automation"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,12 +12,12 @@ crate-type = ["cdylib"]
 testutils = ["soroban-sdk/testutils"]
 
 [dependencies]
-soroban-sdk = "0.1.0"
-soroban-auth = "0.1.0"
+soroban-sdk = "0.4.2"
+soroban-auth = "0.4.2"
 
 [dev_dependencies]
-soroban-sdk = { version = "0.1.0", features = ["testutils"] }
-soroban-auth = { version = "0.1.0", features = ["testutils"] }
+soroban-sdk = { version = "0.4.2", features = ["testutils"] }
+soroban-auth = { version = "0.4.2", features = ["testutils"] }
 
 [profile.release]
 opt-level = "z"
