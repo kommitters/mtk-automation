@@ -8,13 +8,12 @@ pub mod member {
     use crate::contract_actions::identifier_wrapper::identifier;
     use crate::contract_actions::token;
 
+    const KEY: DataKey = DataKey::Members;
+
     pub fn add_member(env: &Env, account: AccountId) {
         let mut members = get_members(&env);
-      
         members.push_back(account);
-      
-        let key = DataKey::Members;
-        env.storage().set(key, members);
+        env.storage().set(KEY, members);
     }
       
     pub fn revoke_membership(env: &Env, from: &AccountId) {
@@ -28,22 +27,18 @@ pub mod member {
         }
       
         members.remove(index);
-      
-        let key = DataKey::Members;
-        env.storage().set(key, members);
+        env.storage().set(KEY, members);
 
         bring_back_tokens_to_admin(&env, &from)
     }
 
-    pub fn bring_back_tokens_to_admin(env: &Env, from: &AccountId){
+    fn bring_back_tokens_to_admin(env: &Env, from: &AccountId){
         let tc_id = token_contract::get_token_contract_id(&env);
         let client = token::Client::new(&env, &tc_id);
       
         let admin_id = admin::get_admin_id(&env);
         let from_identifier = identifier::get_account_identifier(from.clone());
         let member_balance = client.balance(&from_identifier);
-
-        // Swapping TODO
       
         client.xfer_from(
             &Signature::Invoker, 
@@ -52,14 +47,14 @@ pub mod member {
             &admin_id,
             &member_balance
         );
+        todo!("Swapping...");
     }
       
     pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVal<Env, RawVal>>(
         e: &Env,
     ) -> Vec<T> {
-        let key = DataKey::Members;
         e.storage()
-            .get(key)
+            .get(KEY)
             .unwrap_or(Ok(vec![e])) // if no members on vector
             .unwrap()
     }
