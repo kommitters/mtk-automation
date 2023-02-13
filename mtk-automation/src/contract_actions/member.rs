@@ -1,11 +1,12 @@
+// Module where you get and revoke members of the organization
 pub mod member {
     use soroban_sdk::{vec, Env, Vec, AccountId, RawVal};
     use soroban_auth::Signature;
-    use crate::modules::datakey::DataKey;
-    use crate::modules::token_contract::token_contract;
-    use crate::modules::admin::admin;
-    use crate::modules::identifier_wrapper::identifier;
-    use crate::modules::token;
+    use crate::contract_actions::datakey::DataKey;
+    use crate::contract_actions::token_contract::token_contract;
+    use crate::contract_actions::admin::admin;
+    use crate::contract_actions::identifier_wrapper::identifier;
+    use crate::contract_actions::token;
 
     pub fn add_member(env: &Env, account: AccountId) {
         let mut members = get_members(&env);
@@ -30,14 +31,19 @@ pub mod member {
       
         let key = DataKey::Members;
         env.storage().set(key, members);
-      
-        // Bring back it's TOKEN's to the admin
+
+        bring_back_tokens_to_admin(&env, &from)
+    }
+
+    pub fn bring_back_tokens_to_admin(env: &Env, from: &AccountId){
         let tc_id = token_contract::get_token_contract_id(&env);
         let client = token::Client::new(&env, &tc_id);
       
         let admin_id = admin::get_admin_id(&env);
         let from_identifier = identifier::get_account_identifier(from.clone());
         let member_balance = client.balance(&from_identifier);
+
+        // Swapping TODO
       
         client.xfer_from(
             &Signature::Invoker, 

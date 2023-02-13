@@ -1,7 +1,8 @@
+// Module to obtain and modify the admin_id
 pub mod admin {
     use soroban_sdk::Env;
     use soroban_auth::Identifier;
-    use crate::modules::datakey::DataKey;
+    use crate::contract_actions::datakey::DataKey;
 
     pub fn get_admin_id(env: &Env) -> Identifier {
         let key = DataKey::AdminId;

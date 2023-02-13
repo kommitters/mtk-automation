@@ -1,3 +1,4 @@
+// Module to obtain the identifier of an account by ID
 pub mod identifier {
     use soroban_auth::Identifier;
     use soroban_sdk::AccountId;

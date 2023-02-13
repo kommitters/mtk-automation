@@ -1,6 +1,7 @@
+// Module for defining and obtaining the contract token
 pub mod token_contract {
     use soroban_sdk::{Env, BytesN};
-    use crate::modules::datakey::DataKey;
+    use crate::contract_actions::datakey::DataKey;
 
     pub fn get_token_contract_id(env: &Env) -> BytesN<32> {
         let key = DataKey::TokenId;

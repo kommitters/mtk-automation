@@ -4,23 +4,28 @@ use soroban_sdk::{contractimpl, Env, Vec, BytesN, AccountId};
 
 use soroban_auth::Identifier;
 
-mod modules;
+mod contract_actions;
 
+use crate::contract_actions::{admin::admin, member::member, token_contract::token_contract};
 pub struct OrganizationContract;
 
 pub trait OrganizationContractTrait {
     fn initialize(
-        e: Env,
+        env: Env,
         admin: Identifier,
         token_c_id:BytesN<32>
     );
 
+    //add member to the organization
     fn add_m(env: Env, account: AccountId);
-
+    
+    //revoke to the organization
     fn revoke_m(env: Env, from: AccountId);
-
+    
+    //get token contract to the organization
     fn get_tc_id(env: Env) -> BytesN<32>;
     
+    //get members to the organization
     fn get_m(env: Env) -> Vec<AccountId>;
 }
 
@@ -31,24 +36,24 @@ impl OrganizationContractTrait for OrganizationContract {
         admin: Identifier,
         token_c_id: BytesN<32>
     ) {
-        modules::admin::admin::set_admin_id(&env, &admin);
+        admin::set_admin_id(&env, &admin);
 
-        modules::token_contract::token_contract::set_token_id(&env, &token_c_id);
+        token_contract::set_token_id(&env, &token_c_id);
     }
 
     fn add_m(env: Env, account: AccountId) {
-        modules::member::member::add_member(&env, account);
+        member::add_member(&env, account);
     }
     
     fn revoke_m(env: Env, from: AccountId) {
-        modules::member::member::revoke_membership(&env, &from);
+        member::revoke_membership(&env, &from);
     }
     
     fn get_tc_id(env: Env) -> BytesN<32> {
-        modules::token_contract::token_contract::get_token_contract_id(&env)
+        token_contract::get_token_contract_id(&env)
     }
 
     fn get_m(env: Env) -> Vec<AccountId> {
-        modules::member::member::get_members(&env)
+        member::get_members(&env)
     }
 }
