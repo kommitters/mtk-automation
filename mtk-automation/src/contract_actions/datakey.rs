@@ -1,3 +1,5 @@
+//! Module DataKey
+//! 
 //! Module for defining the types of keys within the contract
 use soroban_sdk::contracttype;
 
