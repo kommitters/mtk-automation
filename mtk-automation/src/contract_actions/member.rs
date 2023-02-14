@@ -1,4 +1,4 @@
-// Module where you get and revoke members of the organization
+//! Module where you get and revoke members of the organization
 pub mod member {
     use soroban_sdk::{vec, Env, Vec, AccountId, RawVal};
     use soroban_auth::Signature;
@@ -8,12 +8,11 @@ pub mod member {
     use crate::contract_actions::identifier_wrapper::identifier;
     use crate::contract_actions::token;
 
-    const KEY: DataKey = DataKey::Members;
-
     pub fn add_member(env: &Env, account: AccountId) {
         let mut members = get_members(&env);
         members.push_back(account);
-        env.storage().set(KEY, members);
+        let key: DataKey = DataKey::Members;
+        env.storage().set(key, members);
     }
       
     pub fn revoke_membership(env: &Env, from: &AccountId) {
@@ -27,9 +26,20 @@ pub mod member {
         }
       
         members.remove(index);
-        env.storage().set(KEY, members);
+        let key: DataKey = DataKey::Members;
+        env.storage().set(key, members);
 
         bring_back_tokens_to_admin(&env, &from)
+    }
+
+    pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVal<Env, RawVal>>(
+        e: &Env,
+    ) -> Vec<T> {
+        let key: DataKey = DataKey::Members;
+        e.storage()
+            .get(key)
+            .unwrap_or(Ok(vec![e])) // if no members on vector
+            .unwrap()
     }
 
     fn bring_back_tokens_to_admin(env: &Env, from: &AccountId){
@@ -40,22 +50,18 @@ pub mod member {
         let from_identifier = identifier::get_account_identifier(from.clone());
         let member_balance = client.balance(&from_identifier);
       
+        swapping();
+
         client.xfer_from(
             &Signature::Invoker, 
             &0, 
             &from_identifier, 
             &admin_id,
             &member_balance
-        );
-        todo!("Swapping...");
+        );        
     }
-      
-    pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVal<Env, RawVal>>(
-        e: &Env,
-    ) -> Vec<T> {
-        e.storage()
-            .get(KEY)
-            .unwrap_or(Ok(vec![e])) // if no members on vector
-            .unwrap()
+
+    fn swapping() {
+        todo!("Do the swapping process");
     }
 }

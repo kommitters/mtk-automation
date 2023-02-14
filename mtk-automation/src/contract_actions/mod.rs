@@ -1,4 +1,4 @@
-//Call each of the modules
+//! Call each of the modules
 pub mod datakey;
 pub mod member;
 pub mod token_contract;

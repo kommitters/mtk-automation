@@ -1,4 +1,4 @@
-// Module to obtain and modify the admin_id
+//! Module to obtain and modify the admin_id
 pub mod admin {
     use soroban_sdk::Env;
     use soroban_auth::Identifier;

@@ -16,16 +16,16 @@ pub trait OrganizationContractTrait {
         token_c_id:BytesN<32>
     );
 
-    //add member to the organization
+    /// add member to the organization
     fn add_m(env: Env, account: AccountId);
     
-    //revoke to the organization
+    /// revoke to the organization
     fn revoke_m(env: Env, from: AccountId);
     
-    //get token contract to the organization
+    /// get token contract to the organization
     fn get_tc_id(env: Env) -> BytesN<32>;
     
-    //get members to the organization
+    /// get members to the organization
     fn get_m(env: Env) -> Vec<AccountId>;
 }
 

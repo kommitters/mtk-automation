@@ -1,4 +1,4 @@
-// Module for defining and obtaining the contract token
+//! Module for defining and obtaining the contract token
 pub mod token_contract {
     use soroban_sdk::{Env, BytesN};
     use crate::contract_actions::datakey::DataKey;
