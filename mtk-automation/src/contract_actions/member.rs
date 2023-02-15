@@ -40,3 +40,8 @@ pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVa
         .unwrap_or(Ok(vec![e])) // if no members on vector
         .unwrap()
 }
+
+pub fn is_member(env: &Env, to: &AccountId) -> bool {
+    let members: Vec<AccountId> = get_members(&env);
+    members.contains(to)
+}
