@@ -6,14 +6,14 @@ use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
 
 pub fn add_member(env: &Env, account: AccountId) {
-    let mut members = get_members(&env);
+    let mut members = get_members(env);
     members.push_back(account);
     let key: DataKey = DataKey::Members;
     env.storage().set(key, members);
 }
 
 pub fn revoke_membership(env: &Env, from: &AccountId) {
-    let mut members: Vec<AccountId> = get_members(&env);
+    let mut members: Vec<AccountId> = get_members(env);
 
     let index;
 
