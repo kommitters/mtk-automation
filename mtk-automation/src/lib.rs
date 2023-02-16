@@ -44,7 +44,7 @@ impl OrganizationContractTrait for OrganizationContract {
 
         contract_actions::token_contract::set_token_id(&env, &token_c_id);
 
-        contract_actions::compensate::set_compensations(&env, &compensations);
+        contract_actions::reward::set_rewards(&env, &compensations);
     }
 
     fn add_m(env: Env, account: AccountId) {
@@ -56,7 +56,7 @@ impl OrganizationContractTrait for OrganizationContract {
     }
 
     fn comp_m(env: Env, approval_sign: Signature, to: AccountId, r_type: Symbol) {
-        contract_actions::compensate::compensate_member(&env, &approval_sign, &to, &r_type);
+        contract_actions::reward::reward_member(&env, &approval_sign, &to, &r_type);
     }
     
     fn get_tc_id(env: Env) -> BytesN<32> {

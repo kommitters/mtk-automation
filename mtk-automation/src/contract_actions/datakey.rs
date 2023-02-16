@@ -9,7 +9,7 @@ pub enum DataKey {
     OrgName,
     TokenId,
     AdminId,
-    Compensate,
+    Rewards,
     Members,
     AllowedF
 }
