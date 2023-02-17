@@ -5,7 +5,6 @@ on:
     types: [closed]
     branches:
       - main
-      - staging
       - "v*.[0-9]"
 
 env:
@@ -33,16 +32,6 @@ jobs:
           cargo test
       - run: cargo install --locked --version 0.4.0 soroban-cli
       - name: Contract Deployment to futurenet
-        if: ${{ github.event.pull_request.base.ref }} == staging
-        run: |
-          soroban deploy \
-          --wasm target/wasm32-unknown-unknown/release/soroban_devops.wasm \
-          --secret-key ${{ secrets.DEPLOYER_SECRET }} \
-          --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
-          --network-passphrase 'Test SDF Future Network ; October 2022'
-      - name: Contract Deployment to mainnet
-        if: ${{ github.event.pull_request.base.ref }} == main
-        ## Change when the mainnet for soroban gets released
         run: |
           soroban deploy \
           --wasm target/wasm32-unknown-unknown/release/soroban_devops.wasm \
