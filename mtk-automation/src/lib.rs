@@ -22,14 +22,23 @@ pub trait OrganizationContractTrait {
     /// revoke to the organization
     fn revoke_m(env: Env, from: AccountId);
 
-    /// compensate a member to the organization
-    fn comp_m(e: Env, token_approval_sig: Signature, to: AccountId, r_type: Symbol);
+    /// reward a member to the organization
+    fn reward_m(e: Env, token_approval_sig: Signature, to: AccountId, r_type: Symbol);
 
     /// get token contract to the organization
     fn get_tc_id(env: Env) -> BytesN<32>;
+
+    /// get balanca for the organization
+    fn get_bal(env: Env) -> i128;
     
     /// get members to the organization
     fn get_m(env: Env) -> Vec<AccountId>;
+
+    /// name of organization
+    fn org_name(env: Env) -> Symbol;
+    
+    /// fund contract balance for organization
+    fn fund_c(env: Env, approval_sign: Signature);   
 }
 
 #[contractimpl]
@@ -55,12 +64,24 @@ impl OrganizationContractTrait for OrganizationContract {
         contract_actions::member::revoke_membership(&env, &from);
     }
 
-    fn comp_m(env: Env, approval_sign: Signature, to: AccountId, r_type: Symbol) {
+    fn reward_m(env: Env, approval_sign: Signature, to: AccountId, r_type: Symbol) {
         contract_actions::reward::reward_member(&env, &approval_sign, &to, &r_type);
     }
     
     fn get_tc_id(env: Env) -> BytesN<32> {
         contract_actions::token_contract::get_token_contract_id(&env)
+    }
+
+    fn get_bal(env: Env) -> i128 {
+        contract_actions::fund::get_contract_balance(&env)
+    }
+
+    fn org_name(env: Env) -> Symbol {
+        contract_actions::organization::get_organization_name(&env)
+    }
+
+    fn fund_c(env: Env, approval_sign: Signature) {
+        contract_actions::token_operation::fund_contract_balance(&env, &approval_sign);
     }
 
     fn get_m(env: Env) -> Vec<AccountId> {
