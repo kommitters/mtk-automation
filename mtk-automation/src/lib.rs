@@ -24,22 +24,22 @@ pub trait OrganizationContractTrait {
     /// revoke to the organization
     fn revoke_m(env: Env, from: AccountId);
 
-    /// reward a member to the organization
+    /// reward a member of the organization
     fn reward_m(e: Env, token_approval_sig: Signature, to: AccountId, r_type: Symbol);
 
     /// get token contract to the organization
     fn get_tc_id(env: Env) -> BytesN<32>;
 
-    /// get balanca for the organization
+    /// get the organization balance
     fn get_bal(env: Env) -> i128;
     
     /// get members to the organization
     fn get_m(env: Env) -> Vec<AccountId>;
 
-    /// name of organization
+    /// get the organization's name
     fn org_name(env: Env) -> Symbol;
     
-    /// fund contract balance for organization
+    /// fund contract balance for the organization
     fn fund_c(env: Env, approval_sign: Signature);   
 }
 
@@ -57,7 +57,7 @@ impl OrganizationContractTrait for OrganizationContract {
 
         contract_actions::organization::set_organization_name(&env, org_name);
 
-        contract_actions::fund::set_allowed_funds_to_issue(&env, fund_amount);
+        contract_actions::fund::set_available_funds_to_issue(&env, fund_amount);
 
         contract_actions::token_contract::set_token_id(&env, &token_c_id);
 

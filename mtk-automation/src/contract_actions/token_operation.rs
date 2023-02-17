@@ -49,7 +49,7 @@ pub fn fund_contract_balance(env: &Env, approval_sign: &Signature) {
       &approval_sign,
       &nonce,
       &admin_id,
-      &fund::get_allowed_funds_to_issue(&env),
+      &fund::get_available_funds_to_issue(&env),
   );
 }
 
