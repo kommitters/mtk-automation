@@ -16,10 +16,10 @@ pub fn get_available_funds_to_issue(env: &Env) -> i128 {
 }
 
 pub fn get_contract_balance(env: &Env) -> i128 {
-    let tc_id = token_contract::get_token_contract_id(&env);
-    let client = token::Client::new(&env, tc_id);
+    let tc_id = token_contract::get_token_contract_id(env);
+    let client = token::Client::new(env, tc_id);
 
-    let admin_id = admin::get_admin_id(&env);
+    let admin_id = admin::get_admin_id(env);
 
     client.balance(&admin_id)
 }

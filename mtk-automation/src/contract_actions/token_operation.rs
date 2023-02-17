@@ -39,17 +39,17 @@ pub fn bring_back_tokens_to_admin(env: &Env, from: &AccountId) {
 }
 
 pub fn fund_contract_balance(env: &Env, approval_sign: &Signature) {
-  let token_id = token_contract::get_token_contract_id(&env);
-  let admin_id = admin::get_admin_id(&env);
-  let token_client = token::Client::new(&env, &token_id);
+  let token_id = token_contract::get_token_contract_id(env);
+  let admin_id = admin::get_admin_id(env);
+  let token_client = token::Client::new(env, &token_id);
 
   let nonce = token_client.nonce(&admin_id);
 
   token_client.mint(
-      &approval_sign,
+      approval_sign,
       &nonce,
       &admin_id,
-      &fund::get_available_funds_to_issue(&env),
+      &fund::get_available_funds_to_issue(env),
   );
 }
 
