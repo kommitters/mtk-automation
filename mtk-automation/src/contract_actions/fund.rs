@@ -1,4 +1,4 @@
-//! Module for Organization
+//! Module for Fund
 //! 
 //! Module for managment the fund of the organization
 use soroban_sdk::Env;

@@ -1,6 +1,6 @@
 //! Module for Organization
 //! 
-//! Module to set and get organizaion name
+//! Module to set and get organization name
 use soroban_sdk::{Env, Symbol};
 use crate::contract_actions::datakey::DataKey;
 
