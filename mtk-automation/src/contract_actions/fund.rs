@@ -1,6 +1,6 @@
 //! Module for Fund
 //! 
-//! Module for managment the fund of the organization
+//! Module for managing the organization's funds
 use soroban_sdk::Env;
 use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::admin;
