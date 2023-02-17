@@ -34,7 +34,7 @@ jobs:
       - name: Contract Deployment to futurenet
         run: |
           soroban deploy \
-          --wasm target/wasm32-unknown-unknown/release/soroban_devops.wasm \
+          --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
           --secret-key ${{ secrets.DEPLOYER_SECRET }} \
           --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
           --network-passphrase 'Test SDF Future Network ; October 2022'
