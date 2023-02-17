@@ -9,20 +9,20 @@ use crate::contract_actions::token;
 use crate::contract_actions::identifier_wrapper as identifier;
 
 pub fn transfer(env: &Env, approval_sign: &Signature, to: &Identifier, amount: &i128) {
-  let tc_id = token_contract::get_token_contract_id(&env);
-  let client = token::Client::new(&env, tc_id);
+  let tc_id = token_contract::get_token_contract_id(env);
+  let client = token::Client::new(env, tc_id);
 
-  let admin_id = admin::get_admin_id(&env);
+  let admin_id = admin::get_admin_id(env);
   let nonce = client.nonce(&admin_id);
 
-  client.xfer(&approval_sign, &nonce, &to, &amount);
+  client.xfer(approval_sign, &nonce, to, amount);
 }
 
 pub fn bring_back_tokens_to_admin(env: &Env, from: &AccountId) {
-  let tc_id = token_contract::get_token_contract_id(&env);
-  let client = token::Client::new(&env, &tc_id);
+  let tc_id = token_contract::get_token_contract_id(env);
+  let client = token::Client::new(env, &tc_id);
 
-  let admin_id = admin::get_admin_id(&env);
+  let admin_id = admin::get_admin_id(env);
   let from_identifier = identifier::get_account_identifier(from.clone());
   let member_balance = client.balance(&from_identifier);
 
