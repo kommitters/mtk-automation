@@ -7,6 +7,10 @@ use crate::contract_actions::admin;
 use crate::contract_actions::token;
 use crate::contract_actions::token_contract;
 
+pub fn set_allowed_funds_to_issue(env: &Env, new_value: i128){
+    env.storage().set(DataKey::AllowedF, new_value);
+}
+
 pub fn get_allowed_funds_to_issue(env: &Env) -> i128 {
     env.storage().get(DataKey::AllowedF).unwrap().unwrap()
 }

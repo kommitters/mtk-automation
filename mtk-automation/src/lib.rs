@@ -12,7 +12,9 @@ pub trait OrganizationContractTrait {
     fn initialize(
         e: Env,
         admin: Identifier,
-        compensations: Map<Symbol, u32>,
+        org_name: Symbol,
+        rewards: Map<Symbol, u32>,
+        fund_amount: i128,
         token_c_id:BytesN<32>
     );
 
@@ -46,14 +48,20 @@ impl OrganizationContractTrait for OrganizationContract {
     fn initialize(
         env: Env, 
         admin: Identifier,
-        compensations: Map<Symbol, u32>,
+        org_name: Symbol,
+        rewards: Map<Symbol, u32>,
+        fund_amount: i128,
         token_c_id: BytesN<32>
     ) {
         contract_actions::admin::set_admin_id(&env, &admin);
 
+        contract_actions::organization::set_organization_name(&env, org_name);
+
+        contract_actions::fund::set_allowed_funds_to_issue(&env, fund_amount);
+
         contract_actions::token_contract::set_token_id(&env, &token_c_id);
 
-        contract_actions::reward::set_rewards(&env, &compensations);
+        contract_actions::reward::set_rewards(&env, &rewards);
     }
 
     fn add_m(env: Env, account: AccountId) {
