@@ -6,6 +6,7 @@ use soroban_sdk::{Env, AccountId};
 use crate::contract_actions::token_contract;
 use crate::contract_actions::admin;
 use crate::contract_actions::token;
+use crate::contract_actions::fund;
 use crate::contract_actions::identifier_wrapper as identifier;
 
 pub fn transfer(env: &Env, approval_sign: &Signature, to: &Identifier, amount: &i128) {
@@ -34,6 +35,21 @@ pub fn bring_back_tokens_to_admin(env: &Env, from: &AccountId) {
       &from_identifier,
       &admin_id,
       &member_balance,
+  );
+}
+
+pub fn fund_contract_balance(env: &Env, approval_sign: &Signature) {
+  let token_id = token_contract::get_token_contract_id(env);
+  let admin_id = admin::get_admin_id(env);
+  let token_client = token::Client::new(env, &token_id);
+
+  let nonce = token_client.nonce(&admin_id);
+
+  token_client.mint(
+      approval_sign,
+      &nonce,
+      &admin_id,
+      &fund::get_available_funds_to_issue(env),
   );
 }
 
