@@ -28,7 +28,7 @@ pub fn revoke_membership(env: &Env, from: &AccountId) {
     let key: DataKey = DataKey::Members;
     env.storage().set(key, members);
 
-    token_operation::bring_back_tokens_to_admin(&env, &from)
+    token_operation::bring_back_tokens_to_admin(env, from)
 }
 
 pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVal<Env, RawVal>>(
@@ -42,6 +42,6 @@ pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVa
 }
 
 pub fn is_member(env: &Env, to: &AccountId) -> bool {
-    let members: Vec<AccountId> = get_members(&env);
+    let members: Vec<AccountId> = get_members(env);
     members.contains(to)
 }
