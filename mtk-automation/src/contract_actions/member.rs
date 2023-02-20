@@ -1,19 +1,19 @@
 //! Module Member
 //!
 //! This module lets you get and revoke members of the organization
-use soroban_sdk::{vec, AccountId, Env, RawVal, Vec};
 use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
+use soroban_sdk::{vec, Address, Env, RawVal, Vec};
 
-pub fn add_member(env: &Env, account: AccountId) {
+pub fn add_member(env: &Env, account: Address) {
     let mut members = get_members(env);
     members.push_back(account);
     let key: DataKey = DataKey::Members;
-    env.storage().set(key, members);
+    env.storage().set(&key, &members);
 }
 
-pub fn revoke_membership(env: &Env, from: &AccountId) {
-    let mut members: Vec<AccountId> = get_members(env);
+pub fn revoke_membership(env: &Env, from: &Address) {
+    let mut members: Vec<Address> = get_members(env);
 
     let index;
 
@@ -24,9 +24,10 @@ pub fn revoke_membership(env: &Env, from: &AccountId) {
         }
     }
 
+    from.require_auth();
     members.remove(index);
     let key: DataKey = DataKey::Members;
-    env.storage().set(key, members);
+    env.storage().set(&key, &members);
 
     token_operation::bring_back_tokens_to_admin(env, from)
 }
@@ -36,12 +37,12 @@ pub fn get_members<T: soroban_sdk::TryFromVal<Env, RawVal> + soroban_sdk::IntoVa
 ) -> Vec<T> {
     let key: DataKey = DataKey::Members;
     e.storage()
-        .get(key)
+        .get(&key)
         .unwrap_or(Ok(vec![e])) // if no members on vector
         .unwrap()
 }
 
-pub fn is_member(env: &Env, to: &AccountId) -> bool {
-    let members: Vec<AccountId> = get_members(env);
+pub fn is_member(env: &Env, to: &Address) -> bool {
+    let members: Vec<Address> = get_members(env);
     members.contains(to)
 }
