@@ -1,5 +1,5 @@
 //! Module DataKey
-//! 
+//!
 //! Module for defining the types of keys within the contract
 use soroban_sdk::contracttype;
 
@@ -11,5 +11,5 @@ pub enum DataKey {
     AdminId,
     Rewards,
     Members,
-    AllowedF
+    AllowedF,
 }
