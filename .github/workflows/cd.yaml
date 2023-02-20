@@ -30,10 +30,10 @@ jobs:
         run: |
           cd mtk-automation
           cargo test
-      - run: cargo install --locked --version 0.4.0 soroban-cli
+      - run: cargo install --locked --version 0.6.0 soroban-cli
       - name: Contract Deployment to futurenet
         run: |
-          soroban deploy \
+          soroban contract deploy \
           --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
           --secret-key ${{ secrets.DEPLOYER_SECRET }} \
           --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
