@@ -11,5 +11,5 @@ pub enum DataKey {
     AdminId,
     Rewards,
     Members,
-    AllowedF,
+    AllowedF, //Funds allowed for distribution
 }

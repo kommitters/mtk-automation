@@ -9,11 +9,11 @@ use soroban_sdk::{Address, Env};
 
 use super::fund::get_available_funds_to_issue;
 
-pub fn transfer(env: &Env, token_admin: &Address, to: &Address, amount: &i128) {
+pub fn transfer(env: &Env, approval_address: &Address, to: &Address, amount: &i128) {
     let tc_id = token_contract::get_token_contract_id(env);
     let client = token::Client::new(env, &tc_id);
 
-    client.xfer(token_admin, to, amount);
+    client.xfer(approval_address, to, amount);
 }
 
 pub fn bring_back_tokens_to_admin(env: &Env, from: &Address) {
@@ -29,12 +29,12 @@ pub fn bring_back_tokens_to_admin(env: &Env, from: &Address) {
     client.xfer_from(&admin_id, &from_address, &admin_id, &member_balance);
 }
 
-pub fn fund_contract_balance(env: &Env, token_admin: &Address) {
+pub fn fund_contract_balance(env: &Env, approval_address: &Address) {
     let token_id = token_contract::get_token_contract_id(env);
     let admin_id = admin::get_admin_id(env);
     let token_client = token::Client::new(env, &token_id);
 
-    token_client.mint(token_admin, &admin_id, &get_available_funds_to_issue(env));
+    token_client.mint(approval_address, &admin_id, &get_available_funds_to_issue(env));
 }
 
 fn swap_token_to() {
