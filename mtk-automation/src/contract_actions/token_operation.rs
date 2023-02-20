@@ -38,5 +38,5 @@ pub fn fund_contract_balance(env: &Env, token_admin: &Address) {
 }
 
 fn swap_token_to() {
-    todo!("Do the swapping process from MKT to other aviable token");
+    todo!("Do the swapping process from MKT to other available token");
 }

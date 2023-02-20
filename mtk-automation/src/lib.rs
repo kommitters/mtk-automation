@@ -23,7 +23,7 @@ pub trait OrganizationContractTrait {
     fn revoke_m(env: Env, from: Address);
 
     /// reward a member of the organization
-    fn reward_m(e: Env, token_approval_sig: Address, to: Address, r_type: Symbol);
+    fn reward_m(e: Env, token_address: Address, to: Address, r_type: Symbol);
 
     /// get token contract to the organization
     fn get_tc_id(env: Env) -> BytesN<32>;
@@ -70,8 +70,8 @@ impl OrganizationContractTrait for OrganizationContract {
         contract_actions::member::revoke_membership(&env, &from);
     }
 
-    fn reward_m(env: Env, approval_sign: Address, to: Address, r_type: Symbol) {
-        contract_actions::reward::reward_member(&env, &approval_sign, &to, &r_type);
+    fn reward_m(env: Env, approval_address: Address, to: Address, c_type: Symbol) {
+        contract_actions::reward::reward_member(&env, &approval_address, &to, &c_type);
     }
 
     fn get_tc_id(env: Env) -> BytesN<32> {
@@ -86,8 +86,8 @@ impl OrganizationContractTrait for OrganizationContract {
         contract_actions::organization::get_organization_name(&env)
     }
 
-    fn fund_c(env: Env, approval_sign: Address) {
-        contract_actions::token_operation::fund_contract_balance(&env, &approval_sign);
+    fn fund_c(env: Env, approval_address: Address) {
+        contract_actions::token_operation::fund_contract_balance(&env, &approval_address);
     }
 
     fn get_m(env: Env) -> Vec<Address> {
