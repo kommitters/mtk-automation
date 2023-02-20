@@ -57,7 +57,7 @@ fn happy_path() {
         "Correct Funds found on contract"
     );
 
-    contract_client.add_m(&doe_user.clone());
+    contract_client.add_m(&doe_user);
 
     assert!(
         contract_client.get_m().contains(&doe_user),

@@ -27,7 +27,7 @@ fn get_compensation_by_type(env: &Env, r_type: &Symbol) -> i32 {
     let key = DataKey::Rewards;
     let compensate: Map<Symbol, i32> = env.storage().get(&key).unwrap().unwrap();
 
-    compensate.get(r_type.clone()).unwrap().unwrap()
+    compensate.get(*r_type).unwrap().unwrap()
 }
 
 fn get_rewards(env: &Env) -> Map<Symbol, i32> {
