@@ -8,5 +8,5 @@ pub mod reward;
 pub mod token_contract;
 pub mod token_operation;
 pub mod token {
-    soroban_sdk::contractimport!(file = "./soroban_token_spec.wasm");
+    soroban_sdk::contractimport!(file = "./token_contract.wasm");
 }

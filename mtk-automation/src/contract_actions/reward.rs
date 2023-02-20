@@ -6,31 +6,31 @@ use crate::contract_actions::member;
 use crate::contract_actions::token_operation;
 use soroban_sdk::{Address, Env, Map, Symbol};
 
-pub fn set_rewards(env: &Env, compensate_types: &Map<Symbol, u32>) {
+pub fn set_rewards(env: &Env, compensate_types: &Map<Symbol, i32>) {
     env.storage().set(&DataKey::Rewards, compensate_types);
 }
 
-pub fn reward_member(env: &Env, approval_address: &Address, to: &Address, compensate_types: &Symbol) {
+pub fn reward_member(env: &Env, approval_address: &Address, to: &Address, compensate_type: &Symbol) {
     if !member::is_member(env, to) {
         panic!("The user account you're trying to compensate doesn't belong to the organization");
     }
 
-    if !is_reward_valid(env, compensate_types) {
-        panic!("The compensate type you are trying to use isn't supported")
+    if !is_reward_valid(env, compensate_type) {
+        panic!("The compensation type you are trying to use isn't supported")
     }
 
-    let compensate_value = get_compensation_by_type(env, compensate_types);
+    let compensate_value = get_compensation_by_type(env, compensate_type) as i128;
     token_operation::transfer(env, approval_address, &to.clone(), &compensate_value);
 }
 
-fn get_compensation_by_type(env: &Env, r_type: &Symbol) -> i128 {
+fn get_compensation_by_type(env: &Env, r_type: &Symbol) -> i32 {
     let key = DataKey::Rewards;
-    let compensate: Map<Symbol, i128> = env.storage().get(&key).unwrap().unwrap();
+    let compensate: Map<Symbol, i32> = env.storage().get(&key).unwrap().unwrap();
 
-    compensate.get(*r_type).unwrap().unwrap()
+    compensate.get(r_type.clone()).unwrap().unwrap()
 }
 
-fn get_rewards(env: &Env) -> Map<Symbol, u32> {
+fn get_rewards(env: &Env) -> Map<Symbol, i32> {
     let key = DataKey::Rewards;
     env.storage().get(&key).unwrap().unwrap()
 }

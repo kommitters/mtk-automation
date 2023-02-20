@@ -11,7 +11,7 @@ pub trait OrganizationContractTrait {
         e: Env,
         admin: Address,
         org_name: Symbol,
-        rewards: Map<Symbol, u32>,
+        rewards: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
     );
@@ -38,7 +38,7 @@ pub trait OrganizationContractTrait {
     fn org_name(env: Env) -> Symbol;
 
     /// fund contract balance for the organization
-    fn fund_c(env: Env, approval_sign: Address);
+    fn fund_c(env: Env, approval_address: Address);
 }
 
 #[contractimpl]
@@ -47,7 +47,7 @@ impl OrganizationContractTrait for OrganizationContract {
         env: Env,
         admin: Address,
         org_name: Symbol,
-        rewards: Map<Symbol, u32>,
+        rewards: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
     ) {
@@ -94,3 +94,5 @@ impl OrganizationContractTrait for OrganizationContract {
         contract_actions::member::get_members(&env)
     }
 }
+
+mod test;
