@@ -3,8 +3,8 @@ pub mod admin;
 pub mod datakey;
 pub mod fund;
 pub mod member;
+pub mod offset;
 pub mod organization;
-pub mod reward;
 pub mod token_contract;
 pub mod token_operation;
 pub mod token {

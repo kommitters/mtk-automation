@@ -11,7 +11,7 @@ pub trait OrganizationContractTrait {
         e: Env,
         admin: Address,
         org_name: Symbol,
-        rewards: Map<Symbol, i32>,
+        offsets: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
     );
@@ -22,8 +22,8 @@ pub trait OrganizationContractTrait {
     /// revoke to the organization
     fn revoke_m(env: Env, from: Address);
 
-    /// reward a member of the organization
-    fn reward_m(e: Env, token_address: Address, to: Address, r_type: Symbol);
+    /// offset a member of the organization
+    fn offset_m(e: Env, token_address: Address, to: Address, o_type: Symbol);
 
     /// get token contract to the organization
     fn get_tc_id(env: Env) -> BytesN<32>;
@@ -38,7 +38,7 @@ pub trait OrganizationContractTrait {
     fn org_name(env: Env) -> Symbol;
 
     /// fund contract balance for the organization
-    fn fund_c(env: Env, approval_address: Address);
+    fn fund_c(env: Env, admin_address: Address);
 }
 
 #[contractimpl]
@@ -47,7 +47,7 @@ impl OrganizationContractTrait for OrganizationContract {
         env: Env,
         admin: Address,
         org_name: Symbol,
-        rewards: Map<Symbol, i32>,
+        offsets: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
     ) {
@@ -59,7 +59,7 @@ impl OrganizationContractTrait for OrganizationContract {
 
         contract_actions::token_contract::set_token_id(&env, &token_c_id);
 
-        contract_actions::reward::set_rewards(&env, &rewards);
+        contract_actions::offset::set_offset(&env, &offsets);
     }
 
     fn add_m(env: Env, account: Address) {
@@ -70,8 +70,8 @@ impl OrganizationContractTrait for OrganizationContract {
         contract_actions::member::revoke_membership(&env, &from);
     }
 
-    fn reward_m(env: Env, approval_address: Address, to: Address, c_type: Symbol) {
-        contract_actions::reward::reward_member(&env, &approval_address, &to, &c_type);
+    fn offset_m(env: Env, admin_address: Address, to: Address, o_type: Symbol) {
+        contract_actions::offset::offset_member(&env, &admin_address, &to, &o_type);
     }
 
     fn get_tc_id(env: Env) -> BytesN<32> {
@@ -86,8 +86,8 @@ impl OrganizationContractTrait for OrganizationContract {
         contract_actions::organization::get_organization_name(&env)
     }
 
-    fn fund_c(env: Env, approval_address: Address) {
-        contract_actions::token_operation::fund_contract_balance(&env, &approval_address);
+    fn fund_c(env: Env, admin_address: Address) {
+        contract_actions::token_operation::fund_contract_balance(&env, &admin_address);
     }
 
     fn get_m(env: Env) -> Vec<Address> {
