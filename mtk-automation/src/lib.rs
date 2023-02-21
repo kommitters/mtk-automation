@@ -71,7 +71,7 @@ impl OrganizationContractTrait for OrganizationContract {
     }
 
     fn offset_m(env: Env, admin_address: Address, to: Address, o_type: Symbol) {
-        contract_actions::offset::offset_member(&env, &admin_address, &to, &o_type);
+        contract_actions::offset::offset_a_member(&env, &admin_address, &to, &o_type);
     }
 
     fn get_tc_id(env: Env) -> BytesN<32> {

@@ -10,7 +10,7 @@ pub fn set_offset(env: &Env, offset_types: &Map<Symbol, i32>) {
     env.storage().set(&DataKey::Offsets, offset_types);
 }
 
-pub fn offset_member(env: &Env, admin_address: &Address, to: &Address, offset_type: &Symbol) {
+pub fn offset_a_member(env: &Env, admin_address: &Address, to: &Address, offset_type: &Symbol) {
     if !member::is_member(env, to) {
         panic!("The user account you're trying to offset doesn't belong to the organization");
     }
