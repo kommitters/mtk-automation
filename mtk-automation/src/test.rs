@@ -57,6 +57,12 @@ fn happy_path() {
         "Correct Funds found on contract"
     );
 
+    assert_eq!(
+        contract_client.get_tc_id(),
+        token_id,
+        "Correct token id found on contract"
+    );
+
     contract_client.add_m(&doe_user);
 
     assert!(
