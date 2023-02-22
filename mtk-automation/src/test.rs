@@ -15,7 +15,7 @@ fn create_and_init_token_contract(env: &Env, admin_id: &Address) -> (BytesN<32>,
 }
 
 #[test]
-fn happy_path() {
+fn succesfully_add_and_offset_a_member() {
     let env = Env::default();
 
     // USERS
