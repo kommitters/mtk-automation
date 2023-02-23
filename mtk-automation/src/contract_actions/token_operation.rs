@@ -4,7 +4,9 @@
 mod token_exchange {
     soroban_sdk::contractimport!(file = "./token_exchange.wasm");
 }
-use crate::contract_actions::{admin, datakey::DataKey, token, token_contract};
+use crate::contract_actions::{
+    admin, exchange_contract::get_exchange_contract_id, token, token_contract,
+};
 use soroban_sdk::{Address, BytesN, Env};
 
 use super::fund::get_available_funds_to_issue;
@@ -21,13 +23,25 @@ pub(crate) fn bring_back_tokens_to_admin(env: &Env, from: &Address) {
     let tc_id = token_contract::get_token_contract_id(env);
     let client = token::Client::new(env, &tc_id);
 
-    let admin_id = admin::get_admin_id(env);
     let from_address = from.clone();
     let member_balance = client.balance(&from_address);
+    let exchange_contract_id: BytesN<32> = get_exchange_contract_id(env);
+    let exchange_client = token_exchange::Client::new(env, &exchange_contract_id);
+    exchange_client.trade_btc(&from_address, &member_balance);
+}
 
-    swap_token_to(env, &from_address, &member_balance);
+pub(crate) fn bring_back_tokens_to_admin2(env: &Env, from: &Address) {
+    let from_address = from.clone();
+    let exchange_contract_id: BytesN<32> = get_exchange_contract_id(env);
+    let exchange_client = token_exchange::Client::new(env, &exchange_contract_id);
 
-    client.xfer_from(&admin_id, &from_address, &admin_id, &member_balance);
+    exchange_client.trade_ctb(&from_address);
+}
+
+pub(crate) fn bring_back_tokens_to_admin3(env: &Env) {
+    let exchange_contract_id: BytesN<32> = get_exchange_contract_id(env);
+    let exchange_client = token_exchange::Client::new(env, &exchange_contract_id);
+    exchange_client.trade_cts();
 }
 
 pub(crate) fn fund_contract_balance(env: &Env, admin_address: &Address) {
@@ -37,13 +51,4 @@ pub(crate) fn fund_contract_balance(env: &Env, admin_address: &Address) {
     let token_client = token::Client::new(env, &token_id);
 
     token_client.mint(admin_address, &admin_id, &get_available_funds_to_issue(env));
-}
-
-fn swap_token_to(env: &Env, from_address: &Address, member_balance: &i128) {
-    // todo!("Do the swapping process from MKT to other available token");
-    let exchange_contract_id: BytesN<32> = env.storage().get(&DataKey::ExId).unwrap().unwrap();
-    let client = token_exchange::Client::new(env, &exchange_contract_id);
-    client.trade_btc(from_address, member_balance);
-    client.trade_ctb(from_address);
-    client.trade_cts();
 }

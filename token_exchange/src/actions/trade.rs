@@ -12,8 +12,8 @@ pub(crate) fn trade_buyer_to_contract(env: &Env, buyer: &Address, buy_token_amou
     let offer = storage::load_offer(env);
     let buy_token_client = token::Client::new(env, &offer.buy_token);
     let contract = env.current_contract_address();
-    storage::store_sell_token_amount(&env, offer, &buy_token_amount);
-    storage::set_buy_token_amount(env, &buy_token_amount);
+    storage::store_sell_token_amount(env, offer, buy_token_amount);
+    storage::set_buy_token_amount(env, buy_token_amount);
 
     buy_token_client.xfer(buyer, &contract, buy_token_amount);
 }

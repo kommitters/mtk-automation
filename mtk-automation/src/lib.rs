@@ -24,7 +24,9 @@ pub trait OrganizationContractTrait {
     fn add_m(env: Env, account: Address, admin: Address);
 
     /// revoke to the organization
-    fn revoke_m(env: Env, from: Address, admin: Address);
+    fn revoke_m1(env: Env, from: Address);
+    fn revoke_m2(env: Env, from: Address);
+    fn revoke_m3(env: Env, from: Address);
 
     /// offset a member of the organization
     fn offset_m(e: Env, token_address: Address, to: Address, o_type: Symbol);
@@ -71,8 +73,14 @@ impl OrganizationContractTrait for OrganizationContract {
         member::add_member(&env, account, admin);
     }
 
-    fn revoke_m(env: Env, from: Address, admin: Address) {
-        member::revoke_membership(&env, &from, admin);
+    fn revoke_m1(env: Env, from: Address) {
+        member::revoke_membership1(&env, &from);
+    }
+    fn revoke_m2(env: Env, from: Address) {
+        member::revoke_membership2(&env, &from);
+    }
+    fn revoke_m3(env: Env, from: Address) {
+        member::revoke_membership3(&env, &from);
     }
 
     fn offset_m(env: Env, admin_address: Address, to: Address, o_type: Symbol) {
