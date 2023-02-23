@@ -3,7 +3,7 @@
 mod contract_actions;
 
 use crate::contract_actions::{
-    admin, fund, member, offset, organization, token_contract, token_operation,
+    admin, exchange_contract, fund, member, offset, organization, token_contract, token_operation,
 };
 use soroban_sdk::{contractimpl, Address, BytesN, Env, Map, Symbol, Vec};
 
@@ -17,6 +17,7 @@ pub trait OrganizationContractTrait {
         offsets: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
+        exchancge_c_id: BytesN<32>,
     );
 
     /// add member to the organization
@@ -53,6 +54,7 @@ impl OrganizationContractTrait for OrganizationContract {
         offsets: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
+        exchancge_c_id: BytesN<32>,
     ) {
         if admin::has_administrator(&env) {
             panic!("Contract already initialized")
@@ -62,6 +64,7 @@ impl OrganizationContractTrait for OrganizationContract {
         fund::set_available_funds_to_issue(&env, &fund_amount);
         token_contract::set_token_id(&env, &token_c_id);
         offset::set_offset(&env, &offsets);
+        exchange_contract::set_exchange_contract_id(&env, &exchancge_c_id);
     }
 
     fn add_m(env: Env, account: Address, admin: Address) {
