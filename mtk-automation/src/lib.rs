@@ -53,9 +53,9 @@ impl OrganizationContractTrait for OrganizationContract {
     ) {
         contract_actions::admin::set_admin_id(&env, &admin);
 
-        contract_actions::organization::set_organization_name(&env, org_name);
+        contract_actions::organization::set_organization_name(&env, &org_name);
 
-        contract_actions::fund::set_available_funds_to_issue(&env, fund_amount);
+        contract_actions::fund::set_available_funds_to_issue(&env, &fund_amount);
 
         contract_actions::token_contract::set_token_id(&env, &token_c_id);
 
@@ -63,7 +63,7 @@ impl OrganizationContractTrait for OrganizationContract {
     }
 
     fn add_m(env: Env, account: Address) {
-        contract_actions::member::add_member(&env, account);
+        contract_actions::member::add_member(&env, &account);
     }
 
     fn revoke_m(env: Env, from: Address) {

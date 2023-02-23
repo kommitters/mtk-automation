@@ -5,9 +5,9 @@ use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
 use soroban_sdk::{vec, Address, Env, RawVal, Vec};
 
-pub fn add_member(env: &Env, account: Address) {
+pub fn add_member(env: &Env, account: &Address) {
     let mut members = get_members(env);
-    members.push_back(account);
+    members.push_back(account.clone());
     let key: DataKey = DataKey::Members;
     env.storage().set(&key, &members);
 }
