@@ -30,8 +30,8 @@ jobs:
       # - name: Contract Deployment to futurenet
         env:
           DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
-      - run: echo "$DEPLOYER_SECRET"
-      - run: echo "$env:DEPLOYER_SECRET"
+      - run: echo $DEPLOYER_SECRET
+      - run: echo $env:DEPLOYER_SECRET
         # run: |
         #   soroban contract deploy \
         #   --wasm mtk-automation/target/wasm32-unknown-unknown/release/mtk_automation.wasm \
