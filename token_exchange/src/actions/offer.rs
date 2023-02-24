@@ -1,5 +1,5 @@
 //! Module Offer
-//! 
+//!
 //! Represents an offer managed by the TokenTrade contract.
 //! If a seller wants to sell 1000 XLM for 100 USDC the `sell_price` would be 1000
 //! and `buy_price` would be 100 (or 100 and 10, or any other pair of integers

@@ -46,12 +46,14 @@ fn succesfully_add_and_offset_a_member() {
 
     // CREATE TOKEN CONTRACT
     let (token_id, token_client) = create_and_init_token_contract(&env, &admin_address);
-    let (stable_token_id, _stable_token_client) =
+    let (stable_token_id, stable_token_client) =
         create_and_init_token_contract(&env, &admin_address);
+    stable_token_client.mint(&admin_address, &admin_address, &2000);
 
     // CREATE EXCHANGE CONTRACT
     let offer =
-        create_single_offer_contract(&env, &admin_address, &token_id, &stable_token_id, 1, 1);
+        create_single_offer_contract(&env, &admin_address, &stable_token_id, &token_id, 1, 1);
+    offer.mint_cont(&stable_token_id, &1000);
 
     // Initializate Contract with initial values.
     let allowed_funds_to_issue = 10000;
@@ -121,6 +123,16 @@ fn succesfully_add_and_offset_a_member() {
         60,
         "Contract admin gets back member funds"
     );
+
+    contract_client.revoke_m1(&doe_user);
+    contract_client.revoke_m2(&doe_user);
+    contract_client.revoke_m3(&doe_user);
+    assert!(
+        contract_client.get_m().is_empty(),
+        "Member sucessfully revoked",
+    );
+    assert_eq!(token_client.balance(&doe_user), 0);
+    assert_eq!(stable_token_client.balance(&doe_user), 60);
 }
 
 #[test]

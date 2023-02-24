@@ -1,7 +1,7 @@
 //! Module Trade
-//! 
-//!A module that has the 3 trading steps at the time of making a trading process, 
-//!only for demonstration purposes, when the CLI allows making multiple 
+//!
+//!A module that has the 3 trading steps at the time of making a trading process,
+//!only for demonstration purposes, when the CLI allows making multiple
 //!transactions in a single function it should be changed
 use soroban_sdk::{Address, Env};
 

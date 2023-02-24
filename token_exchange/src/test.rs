@@ -1,7 +1,7 @@
 #![cfg(test)]
 extern crate std;
 
-use crate::{TokenTradeClient, actions::token};
+use crate::{actions::token, TokenTradeClient};
 use soroban_sdk::{symbol, testutils::Address as _, Address, BytesN, Env, IntoVal};
 
 fn create_and_init_token_contract(env: &Env, admin_id: &Address) -> (BytesN<32>, token::Client) {
@@ -56,7 +56,7 @@ fn succesfull_trade() {
     let offer_address = Address::from_contract_id(&env, &offer.contract_id);
     sell_token_client.mint(&token_admin, &seller, &200);
     buy_token_client.mint(&token_admin, &buyer, &100);
-    
+
     //Contract owner need to "mint" the contract if we want the contract to be the middleman
     offer.mint_cont(&sell_token_id, &100);
     assert_eq!(offer.get_c_bal(&sell_token_id), 100);
