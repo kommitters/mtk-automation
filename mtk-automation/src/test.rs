@@ -63,7 +63,7 @@ fn succesfully_add_and_offset_a_member() {
         "Correct token id found on contract"
     );
 
-    contract_client.add_m(&doe_user);
+    contract_client.add_m(&doe_user, &admin_address);
 
     assert!(
         contract_client.get_m().contains(&doe_user),
@@ -142,7 +142,7 @@ fn offset_with_invalid_type() {
     );
 
     contract_client.fund_c(&admin_address);
-    contract_client.add_m(&doe_user);
+    contract_client.add_m(&doe_user, &admin_address);
 
     contract_client.offset_m(&admin_address, &doe_user, &symbol!("oss_contri"));
 }
