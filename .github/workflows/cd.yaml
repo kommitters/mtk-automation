@@ -29,12 +29,9 @@ jobs:
           cargo test
       - run: cargo install --locked --version 0.6.0 soroban-cli
       - name: Contract Deployment to futurenet
-        env:
-          DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
         run: |
-          cd mtk-automation
           soroban contract deploy \
           --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
-          --secret-key "$DEPLOYER_SECRET" \
+          --secret-key ${{ secrets.DEPLOYER_SECRET }} \
           --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
           --network-passphrase 'Test SDF Future Network ; October 2022'

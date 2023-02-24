@@ -21,6 +21,6 @@ pub fn has_administrator(e: &Env) -> bool {
 
 pub fn check_admin(e: &Env, admin: &Address) {
     if admin != &get_admin_id(e) {
-        panic!("Not authorized by admin")
+        panic!("Not Authorized")
     }
 }
