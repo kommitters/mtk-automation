@@ -32,7 +32,7 @@ jobs:
           DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
         run: |
           soroban contract deploy \
-          --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
+          --wasm mtk-automation/target/wasm32-unknown-unknown/release/mtk_automation.wasm \
           --secret-key "$DEPLOYER_SECRET" \
           --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
           --network-passphrase 'Test SDF Future Network ; October 2022'
