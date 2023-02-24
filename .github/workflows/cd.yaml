@@ -5,6 +5,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
 
 jobs:
   build_and_test:
@@ -28,8 +29,6 @@ jobs:
       #     cargo test
       # - run: cargo install --locked --version 0.6.0 soroban-cli
       # - name: Contract Deployment to futurenet
-        env:
-          DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
       - run: echo $DEPLOYER_SECRET
       - run: echo $env:DEPLOYER_SECRET
         # run: |
