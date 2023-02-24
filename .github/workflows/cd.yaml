@@ -12,9 +12,12 @@ jobs:
           - stable
     env:
       CARGO_TERM_COLOR: always
-      DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
+      # DEPLOYER_SECRET: ${{ secrets.DEPLOYER_SECRET }}
     steps:
       - uses: actions/checkout@v3
+      - name: "ECHO TEST"
+        with:
+            deployer: ${{ secrets.DEPLOYER_SECRET }}
       # - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
       # - run: rustup target add wasm32-unknown-unknown
       # - name: Contract Build
@@ -27,7 +30,7 @@ jobs:
       #     cargo test
       # - run: cargo install --locked --version 0.6.0 soroban-cli
       # - name: Contract Deployment to futurenet
-      - run: echo "$GITHUB_CONTEXT"
+      - run: echo "deployer"
       - run: echo "HORUS"
         # run: |
         #   cd mtk-automation
