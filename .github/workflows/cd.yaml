@@ -27,7 +27,8 @@ jobs:
       #     cargo test
       # - run: cargo install --locked --version 0.6.0 soroban-cli
       # - name: Contract Deployment to futurenet
-      - run: echo ${{ secrets.DEPLOYER_SECRET }}
+      - run: echo "$GITHUB_CONTEXT"
+      - run: echo "HORUS"
         # run: |
         #   cd mtk-automation
         #   soroban contract deploy \
