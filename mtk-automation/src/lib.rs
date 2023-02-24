@@ -1,8 +1,11 @@
 #![no_std]
 
-use soroban_sdk::{contractimpl, Address, BytesN, Env, Map, Symbol, Vec};
-
 mod contract_actions;
+
+use crate::contract_actions::{
+    admin, fund, member, offset, organization, token_contract, token_operation,
+};
+use soroban_sdk::{contractimpl, Address, BytesN, Env, Map, Symbol, Vec};
 
 pub struct OrganizationContract;
 
@@ -51,47 +54,43 @@ impl OrganizationContractTrait for OrganizationContract {
         fund_amount: i128,
         token_c_id: BytesN<32>,
     ) {
-        contract_actions::admin::set_admin_id(&env, &admin);
-
-        contract_actions::organization::set_organization_name(&env, org_name);
-
-        contract_actions::fund::set_available_funds_to_issue(&env, fund_amount);
-
-        contract_actions::token_contract::set_token_id(&env, &token_c_id);
-
-        contract_actions::offset::set_offset(&env, &offsets);
+        admin::set_admin_id(&env, &admin);
+        organization::set_organization_name(&env, &org_name);
+        fund::set_available_funds_to_issue(&env, &fund_amount);
+        token_contract::set_token_id(&env, &token_c_id);
+        offset::set_offset(&env, &offsets);
     }
 
     fn add_m(env: Env, account: Address) {
-        contract_actions::member::add_member(&env, account);
+        member::add_member(&env, &account);
     }
 
     fn revoke_m(env: Env, from: Address) {
-        contract_actions::member::revoke_membership(&env, &from);
+        member::revoke_membership(&env, &from);
     }
 
     fn offset_m(env: Env, admin_address: Address, to: Address, o_type: Symbol) {
-        contract_actions::offset::offset_a_member(&env, &admin_address, &to, &o_type);
+        offset::offset_a_member(&env, &admin_address, &to, &o_type);
     }
 
     fn get_tc_id(env: Env) -> BytesN<32> {
-        contract_actions::token_contract::get_token_contract_id(&env)
+        token_contract::get_token_contract_id(&env)
     }
 
     fn get_bal(env: Env) -> i128 {
-        contract_actions::fund::get_contract_balance(&env)
+        fund::get_contract_balance(&env)
     }
 
     fn org_name(env: Env) -> Symbol {
-        contract_actions::organization::get_organization_name(&env)
+        organization::get_organization_name(&env)
     }
 
     fn fund_c(env: Env, admin_address: Address) {
-        contract_actions::token_operation::fund_contract_balance(&env, &admin_address);
+        token_operation::fund_contract_balance(&env, &admin_address);
     }
 
     fn get_m(env: Env) -> Vec<Address> {
-        contract_actions::member::get_members(&env)
+        member::get_members(&env)
     }
 }
 
