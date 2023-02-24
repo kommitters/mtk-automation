@@ -54,7 +54,9 @@ impl OrganizationContractTrait for OrganizationContract {
         fund_amount: i128,
         token_c_id: BytesN<32>,
     ) {
-        if admin::has_administrator(&env) {panic!("Contract already initialized")}
+        if admin::has_administrator(&env) {
+            panic!("Contract already initialized")
+        }
         admin::set_admin_id(&env, &admin);
         organization::set_organization_name(&env, &org_name);
         fund::set_available_funds_to_issue(&env, &fund_amount);

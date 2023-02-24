@@ -26,6 +26,10 @@ jobs:
         run: |
           cd mtk-automation
           cargo clippy --all-targets --all-features -- -D warnings
+      - name: Format code
+        run: |
+          cd mtk-automation
+          cargo fmt --check
       - name: Code Tests
         run: |
           cd mtk-automation
