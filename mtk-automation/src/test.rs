@@ -32,7 +32,7 @@ fn create_single_offer_contract(
 }
 
 #[test]
-fn succesfully_add_and_offset_a_member() {
+fn successfully_add_and_offset_a_member() {
     let env = Env::default();
 
     // USERS
@@ -129,7 +129,7 @@ fn succesfully_add_and_offset_a_member() {
     contract_client.revoke_m3(&doe_user);
     assert!(
         contract_client.get_m().is_empty(),
-        "Member sucessfully revoked",
+        "Member successfully revoked",
     );
     assert_eq!(token_client.balance(&doe_user), 0);
     assert_eq!(stable_token_client.balance(&doe_user), 60);

@@ -20,7 +20,7 @@ pub trait TokenTradeTrait {
     fn trade_cts(env: Env);
     fn mint_cont(env: Env, token: BytesN<32>, amount: i128);
     fn withdraw(e: Env, token: BytesN<32>, amount: i128);
-    fn updt_price(e: Env, admin: Address, sell_price: u32, buy_price: u32);
+    fn updt_price(e: Env, sell_price: u32, buy_price: u32);
     fn get_offer(e: Env) -> Offer;
     fn get_c_bal(env: Env, token: BytesN<32>) -> i128;
 }
@@ -97,8 +97,8 @@ impl TokenTradeTrait for TokenTrade {
 
     /// Updates the price.
     /// Must be authorized by seller.
-    fn updt_price(env: Env, admin: Address, sell_price: u32, buy_price: u32) {
-        storage::update_offer_price(&env, &admin, &sell_price, &buy_price)
+    fn updt_price(env: Env, sell_price: u32, buy_price: u32) {
+        storage::update_offer_price(&env, &sell_price, &buy_price)
     }
 
     /// Returns the current state of the offer.

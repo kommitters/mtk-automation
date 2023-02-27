@@ -2,7 +2,7 @@
 //!
 //!Allows to request and update the storage values of the contract
 
-use soroban_sdk::{unwrap::UnwrapOptimized, Address, Env};
+use soroban_sdk::{unwrap::UnwrapOptimized, Env};
 
 use super::{offer::Offer, storage_types::DataKey};
 
@@ -39,14 +39,12 @@ pub(crate) fn store_sell_token_amount(env: &Env, offer: Offer, buy_token_amount:
     set_sell_token_amount(env, &sell_token_amount);
 }
 
-pub(crate) fn update_offer_price(env: &Env, admin: &Address, sell_price: &u32, buy_price: &u32) {
+pub(crate) fn update_offer_price(env: &Env, sell_price: &u32, buy_price: &u32) {
     if *buy_price == 0 || *sell_price == 0 {
         panic!("zero price is not allowed");
     }
     let mut offer = load_offer(env);
-    if offer.seller != *admin {
-        panic!("The contract administrator is not the address specified");
-    }
+
     offer.seller.require_auth();
     offer.sell_price = *sell_price;
     offer.buy_price = *buy_price;

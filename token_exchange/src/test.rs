@@ -43,7 +43,7 @@ fn create_single_offer_contract(
 }
 
 #[test]
-fn succesfull_trade() {
+fn successful_trade() {
     let env: Env = Default::default();
     let token_admin = Address::random(&env);
     let seller = Address::random(&env);
@@ -84,7 +84,7 @@ fn succesfull_trade() {
     assert_eq!(sell_token_client.balance(&offer_address), 70);
 
     // The price here is 1 sell_token for 2 buy_token.
-    offer.updt_price(&seller, &1, &2);
+    offer.updt_price(&1, &2);
 
     assert_eq!(
         env.recorded_top_authorizations(),
@@ -142,19 +142,5 @@ fn update_with_not_allowed_prices() {
     let (buy_token_id, _) = create_and_init_token_contract(&env, &token_admin);
 
     let offer = create_single_offer_contract(&env, &seller, &sell_token_id, &buy_token_id, 1, 1);
-    offer.updt_price(&seller, &0, &0);
-}
-
-#[test]
-#[should_panic(expected = "The contract administrator is not the address specified")]
-fn update_without_being_admin() {
-    let env: Env = Default::default();
-    let token_admin = Address::random(&env);
-    let seller = Address::random(&env);
-    let buyer = Address::random(&env);
-    let (sell_token_id, _) = create_and_init_token_contract(&env, &token_admin);
-    let (buy_token_id, _) = create_and_init_token_contract(&env, &token_admin);
-
-    let offer = create_single_offer_contract(&env, &seller, &sell_token_id, &buy_token_id, 1, 1);
-    offer.updt_price(&buyer, &1, &1);
+    offer.updt_price(&0, &0);
 }
