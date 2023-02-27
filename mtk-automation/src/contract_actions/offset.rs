@@ -23,7 +23,6 @@ pub(crate) fn offset_a_member(
     if !is_offset_valid(env, offset_type) {
         panic!("The offset type you are trying to use isn't supported")
     }
-
     let offset_value = get_offset_by_type(env, offset_type) as i128;
     token_operation::transfer(env, admin_address, &to.clone(), &offset_value);
 }

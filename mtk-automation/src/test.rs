@@ -2,7 +2,7 @@
 extern crate std;
 
 use super::{OrganizationContract, OrganizationContractClient};
-use soroban_sdk::{symbol, testutils::Address as _, Address, BytesN, Env, Map, Symbol};
+use soroban_sdk::{symbol, testutils::Address as _, Address, BytesN, Env, IntoVal, Map, Symbol};
 
 mod token {
     soroban_sdk::contractimport!(file = "./token_contract.wasm");
@@ -51,6 +51,7 @@ fn succesfully_add_and_offset_a_member() {
     );
 
     contract_client.fund_c(&admin_address);
+
     assert_eq!(
         contract_client.get_bal(),
         allowed_funds_to_issue,
@@ -64,6 +65,15 @@ fn succesfully_add_and_offset_a_member() {
     );
 
     contract_client.add_m(&doe_user, &admin_address);
+    assert_eq!(
+        env.recorded_top_authorizations(),
+        std::vec![(
+            admin_address.clone(),
+            contract_id.clone(),
+            symbol!("add_m"),
+            (&doe_user, &admin_address).into_val(&env)
+        )]
+    );
 
     assert!(
         contract_client.get_m().contains(&doe_user),
@@ -71,6 +81,16 @@ fn succesfully_add_and_offset_a_member() {
     );
 
     contract_client.offset_m(&admin_address, &doe_user, &symbol!("congrat"));
+
+    assert_eq!(
+        env.recorded_top_authorizations(),
+        std::vec![(
+            admin_address.clone(),
+            contract_id,
+            symbol!("offset_m"),
+            (&admin_address, &doe_user, symbol!("congrat")).into_val(&env)
+        )]
+    );
     contract_client.offset_m(&admin_address, &doe_user, &symbol!("thank"));
     assert_eq!(
         token_client.balance(&doe_user),

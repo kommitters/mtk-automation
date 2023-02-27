@@ -14,13 +14,7 @@ pub(crate) fn set_admin_id(env: &Env, account_id: &Address) {
     env.storage().set(&DataKey::AdminId, account_id);
 }
 
-pub fn has_administrator(e: &Env) -> bool {
+pub(crate) fn has_administrator(env: &Env) -> bool {
     let key = DataKey::AdminId;
-    e.storage().has(&key)
-}
-
-pub fn check_admin(e: &Env, admin: &Address) {
-    if admin != &get_admin_id(e) {
-        panic!("Not Authorized")
-    }
+    env.storage().has(&key)
 }

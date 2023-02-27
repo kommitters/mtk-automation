@@ -1,13 +1,12 @@
 //! Module Member
 //!
 //! This module lets you get and revoke members of the organization
-use crate::contract_actions::admin;
 use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
 use soroban_sdk::{vec, Address, Env, RawVal, Vec};
 
 pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
-    admin::check_admin(env, &admin);
+    admin.require_auth();
     if is_member(env, &member) {
         panic!("Member Already exists")
     };
@@ -18,7 +17,7 @@ pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
 }
 
 pub(crate) fn revoke_membership(env: &Env, from: &Address, admin: Address) {
-    admin::check_admin(env, &admin);
+    admin.require_auth();
     let mut members: Vec<Address> = get_members(env);
 
     let index;
