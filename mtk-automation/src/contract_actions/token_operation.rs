@@ -19,7 +19,7 @@ pub(crate) fn transfer(env: &Env, admin_address: &Address, to: &Address, amount:
     client.xfer(admin_address, to, amount);
 }
 
-pub(crate) fn bring_back_tokens_to_admin(env: &Env, from: &Address) {
+pub(crate) fn bring_back_tokens_to_admin1(env: &Env, from: &Address) {
     from.require_auth();
     let tc_id = token_contract::get_token_contract_id(env);
     let client = token::Client::new(env, &tc_id);

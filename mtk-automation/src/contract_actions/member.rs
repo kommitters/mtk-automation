@@ -19,14 +19,12 @@ pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
 
 pub(crate) fn revoke_membership1(env: &Env, from: &Address) {
     let members: Vec<Address> = get_members(env);
-    from.require_auth();
     find_if_revocable(from, &members).unwrap();
     token_operation::bring_back_tokens_to_admin1(env, from)
 }
 
 pub(crate) fn revoke_membership2(env: &Env, from: &Address) {
     let members: Vec<Address> = get_members(env);
-    from.require_auth();
     find_if_revocable(from, &members).unwrap();
     token_operation::bring_back_tokens_to_admin2(env, from)
 }
@@ -35,7 +33,6 @@ pub(crate) fn revoke_membership3(env: &Env, from: &Address) {
     let mut members: Vec<Address> = get_members(env);
     let index = find_if_revocable(from, &members).unwrap();
 
-    from.require_auth();
     members.remove(index);
     let key: DataKey = DataKey::Members;
     env.storage().set(&key, &members);

@@ -1,16 +1,13 @@
 #![cfg(test)]
 extern crate std;
 
-use crate::contract_actions::token;
-
-use super::{OrganizationContract, OrganizationContractClient};
 mod token_exchange {
     soroban_sdk::contractimport!(file = "./token_exchange.wasm");
+}
+use super::{OrganizationContract, OrganizationContractClient};
+use crate::contract_actions::token;
 use soroban_sdk::{symbol, testutils::Address as _, Address, BytesN, Env, IntoVal, Map, Symbol};
 
-mod token {
-    soroban_sdk::contractimport!(file = "./token_contract.wasm");
-}
 const WASM: &[u8] = include_bytes!("../token_exchange.wasm");
 fn create_and_init_token_contract(env: &Env, admin_id: &Address) -> (BytesN<32>, token::Client) {
     let id = env.register_stellar_asset_contract(admin_id.clone());

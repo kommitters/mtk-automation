@@ -22,4 +22,3 @@ version = "0.6.0"
 
 [workspace.dependencies.soroban-auth]
 version = "0.6.0"
-
