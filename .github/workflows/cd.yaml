@@ -30,6 +30,7 @@ jobs:
       - run: cargo install --locked --version 0.6.0 soroban-cli
       - name: Contract Deployment to futurenet
         run: |
+          cd mtk-automation
           soroban contract deploy \
           --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
           --secret-key ${{ secrets.DEPLOYER_SECRET }} \
