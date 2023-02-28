@@ -8,5 +8,5 @@ pub mod organization;
 pub mod token_contract;
 pub mod token_operation;
 pub mod token {
-    soroban_sdk::contractimport!(file = "./token_contract.wasm");
+    soroban_sdk::contractimport!(file = "../token_contract.wasm");
 }
