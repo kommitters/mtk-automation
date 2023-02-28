@@ -1,9 +1,10 @@
 //! Module Member
 //!
 //! This module lets you get and revoke members of the organization
+
 use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
-use soroban_sdk::{vec, Address, Env, RawVal, Vec, symbol, Symbol};
+use soroban_sdk::{vec, Address, Env, RawVal, Vec};
 
 pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
     admin.require_auth();
@@ -19,20 +20,30 @@ pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
 pub(crate) fn revoke_membership_stage1(env: &Env, from: &Address) {
     from.require_auth();
     let members: Vec<Address> = get_members(env);
-    find_if_revocable(from, &members).unwrap();
+    match find_if_revocable(from, &members) {
+        Ok(_result) => (),
+        Err(error) => panic!("{}", error),
+    }
     token_operation::bring_back_tokens_to_admin_stage1(env, from)
 }
 
 pub(crate) fn revoke_membership_stage2(env: &Env, from: &Address) {
     from.require_auth();
     let members: Vec<Address> = get_members(env);
-    find_if_revocable(from, &members).unwrap();
+    match find_if_revocable(from, &members) {
+        Ok(_result) => (),
+        Err(error) => panic!("{}", error),
+    }
     token_operation::bring_back_tokens_to_admin_stage2(env, from)
 }
 
 pub(crate) fn revoke_membership_stage3(env: &Env, from: &Address) {
     let mut members: Vec<Address> = get_members(env);
-    let index = find_if_revocable(from, &members).unwrap();
+
+    let index: u32 = match find_if_revocable(from, &members) {
+        Ok(result) => result,
+        Err(error) => panic!("{}", error),
+    };
 
     from.require_auth();
     members.remove(index);
@@ -59,9 +70,9 @@ pub(crate) fn is_member(env: &Env, to: &Address) -> bool {
     members.contains(to)
 }
 
-fn find_if_revocable(from: &Address, members: &Vec<Address>) -> Result<u32, Symbol> {
+fn find_if_revocable<'a>(from: &'a Address, members: &'a Vec<Address>) -> Result<u32, &'a str> {
     match members.first_index_of(from) {
         Some(i) => Ok(i),
-        None => Err(symbol!("error")),
+        None => Err("The user account you're trying to revoke doesn't belong to the organization"),
     }
 }
