@@ -5,14 +5,19 @@ use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
 use soroban_sdk::{vec, Address, Env, RawVal, Vec};
 
-pub(crate) fn add_member(env: &Env, account: &Address) {
+pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
+    admin.require_auth();
+    if is_member(env, &member) {
+        panic!("Member Already exists")
+    };
     let mut members = get_members(env);
-    members.push_back(account.clone());
+    members.push_back(member);
     let key: DataKey = DataKey::Members;
     env.storage().set(&key, &members);
 }
 
-pub(crate) fn revoke_membership(env: &Env, from: &Address) {
+pub(crate) fn revoke_membership(env: &Env, from: &Address, admin: Address) {
+    admin.require_auth();
     let mut members: Vec<Address> = get_members(env);
 
     let index;
