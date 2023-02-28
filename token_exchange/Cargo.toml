@@ -1,5 +1,5 @@
 [package]
-name = "mtk-automation"
+name = "token_exchange"
 version = "0.1.0"
 edition = "2021"
 

@@ -20,17 +20,13 @@ jobs:
       - run: rustup target add wasm32-unknown-unknown
       - name: Contract Build
         run: |
-          cd mtk-automation
           cargo build --target wasm32-unknown-unknown --release
       - name: Code Verifications
         run: |
-          cd mtk-automation
           cargo clippy --all-targets --all-features -- -D warnings
       - name: Format code
         run: |
-          cd mtk-automation
           cargo fmt --check
       - name: Code Tests
         run: |
-          cd mtk-automation
           cargo test
