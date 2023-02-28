@@ -13,3 +13,8 @@ pub(crate) fn get_admin_id(env: &Env) -> Address {
 pub(crate) fn set_admin_id(env: &Env, account_id: &Address) {
     env.storage().set(&DataKey::AdminId, account_id);
 }
+
+pub(crate) fn has_administrator(env: &Env) -> bool {
+    let key = DataKey::AdminId;
+    env.storage().has(&key)
+}

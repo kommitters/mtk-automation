@@ -20,10 +20,10 @@ pub trait OrganizationContractTrait {
     );
 
     /// add member to the organization
-    fn add_m(env: Env, account: Address);
+    fn add_m(env: Env, account: Address, admin: Address);
 
     /// revoke to the organization
-    fn revoke_m(env: Env, from: Address);
+    fn revoke_m(env: Env, from: Address, admin: Address);
 
     /// offset a member of the organization
     fn offset_m(e: Env, token_address: Address, to: Address, o_type: Symbol);
@@ -54,6 +54,9 @@ impl OrganizationContractTrait for OrganizationContract {
         fund_amount: i128,
         token_c_id: BytesN<32>,
     ) {
+        if admin::has_administrator(&env) {
+            panic!("Contract already initialized")
+        }
         admin::set_admin_id(&env, &admin);
         organization::set_organization_name(&env, &org_name);
         fund::set_available_funds_to_issue(&env, &fund_amount);
@@ -61,12 +64,12 @@ impl OrganizationContractTrait for OrganizationContract {
         offset::set_offset(&env, &offsets);
     }
 
-    fn add_m(env: Env, account: Address) {
-        member::add_member(&env, &account);
+    fn add_m(env: Env, account: Address, admin: Address) {
+        member::add_member(&env, account, admin);
     }
 
-    fn revoke_m(env: Env, from: Address) {
-        member::revoke_membership(&env, &from);
+    fn revoke_m(env: Env, from: Address, admin: Address) {
+        member::revoke_membership(&env, &from, admin);
     }
 
     fn offset_m(env: Env, admin_address: Address, to: Address, o_type: Symbol) {
