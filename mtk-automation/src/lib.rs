@@ -5,6 +5,7 @@ mod contract_actions;
 use crate::contract_actions::{
     admin, fund, member, offset, organization, token_contract, token_operation,
 };
+use contract_actions::exchange_contract;
 use soroban_sdk::{contractimpl, Address, BytesN, Env, Map, Symbol, Vec};
 
 pub struct OrganizationContract;
@@ -17,13 +18,16 @@ pub trait OrganizationContractTrait {
         offsets: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
+        exchange_c_id: BytesN<32>,
     );
 
     /// add member to the organization
     fn add_m(env: Env, account: Address, admin: Address);
 
     /// revoke to the organization
-    fn revoke_m(env: Env, from: Address, admin: Address);
+    fn revoke_m1(env: Env, from: Address);
+    fn revoke_m2(env: Env, from: Address);
+    fn revoke_m3(env: Env, from: Address);
 
     /// offset a member of the organization
     fn offset_m(e: Env, token_address: Address, to: Address, o_type: Symbol);
@@ -53,6 +57,7 @@ impl OrganizationContractTrait for OrganizationContract {
         offsets: Map<Symbol, i32>,
         fund_amount: i128,
         token_c_id: BytesN<32>,
+        exchange_c_id: BytesN<32>,
     ) {
         if admin::has_administrator(&env) {
             panic!("Contract already initialized")
@@ -62,14 +67,21 @@ impl OrganizationContractTrait for OrganizationContract {
         fund::set_available_funds_to_issue(&env, &fund_amount);
         token_contract::set_token_id(&env, &token_c_id);
         offset::set_offset(&env, &offsets);
+        exchange_contract::set_exchange_contract_id(&env, &exchange_c_id);
     }
 
     fn add_m(env: Env, account: Address, admin: Address) {
         member::add_member(&env, account, admin);
     }
 
-    fn revoke_m(env: Env, from: Address, admin: Address) {
-        member::revoke_membership(&env, &from, admin);
+    fn revoke_m1(env: Env, from: Address) {
+        member::revoke_membership_stage1(&env, &from);
+    }
+    fn revoke_m2(env: Env, from: Address) {
+        member::revoke_membership_stage2(&env, &from);
+    }
+    fn revoke_m3(env: Env, from: Address) {
+        member::revoke_membership_stage3(&env, &from);
     }
 
     fn offset_m(env: Env, admin_address: Address, to: Address, o_type: Symbol) {
