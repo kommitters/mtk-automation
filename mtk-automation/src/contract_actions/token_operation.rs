@@ -1,6 +1,8 @@
 //! Module Token Operation
 //!
 //! Module where the token_contract functions are used
+//! bring_back_tokens_to_admin is implemented in 3 stages only for demonstration purposes,
+//! when the CLI allows making multiple transactions in a single function it should be changed
 
 mod token_exchange {
     soroban_sdk::contractimport!(file = "./token_exchange.wasm");

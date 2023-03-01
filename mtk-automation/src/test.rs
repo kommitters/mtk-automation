@@ -122,9 +122,9 @@ fn succesfully_add_offset_and_revoke_a_member() {
         "Contract admin gets back member funds"
     );
 
-    contract_client.revoke_m1(&doe_user);
-    contract_client.revoke_m2(&doe_user);
-    contract_client.revoke_m3(&doe_user);
+    contract_client.revoke_s1(&doe_user);
+    contract_client.revoke_s2(&doe_user);
+    contract_client.revoke_s3(&doe_user);
     assert!(
         contract_client.get_m().is_empty(),
         "Member sucessfully revoked",
@@ -252,7 +252,7 @@ fn when_revoking_a_non_existing_member() {
 
     contract_client.fund_c(&admin_address);
 
-    contract_client.revoke_m1(&doe_user);
+    contract_client.revoke_s1(&doe_user);
 }
 
 #[test]

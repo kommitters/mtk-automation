@@ -1,6 +1,9 @@
 //! Module Member
 //!
 //! This module lets you get and revoke members of the organization
+//!
+//! The revoke_membership process is implemented in 3 stages only for demonstration purposes,
+//! when the CLI allows making multiple transactions in a single function it should be changed
 
 use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
