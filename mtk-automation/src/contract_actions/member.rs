@@ -1,6 +1,10 @@
 //! Module Member
 //!
 //! This module lets you get and revoke members of the organization
+//!
+//! The revoke_membership process is implemented in 3 stages only for demonstration purposes,
+//! when the CLI allows making multiple transactions in a single function it should be changed
+
 use crate::contract_actions::datakey::DataKey;
 use crate::contract_actions::token_operation;
 use soroban_sdk::{vec, Address, Env, RawVal, Vec};
@@ -16,25 +20,40 @@ pub(crate) fn add_member(env: &Env, member: Address, admin: Address) {
     env.storage().set(&key, &members);
 }
 
-pub(crate) fn revoke_membership(env: &Env, from: &Address, admin: Address) {
-    admin.require_auth();
+pub(crate) fn revoke_membership_stage1(env: &Env, from: &Address) {
+    from.require_auth();
+    let members: Vec<Address> = get_members(env);
+    match find_if_revocable(from, &members) {
+        Ok(_result) => (),
+        Err(error) => panic!("{}", error),
+    }
+    token_operation::bring_back_tokens_to_admin_stage1(env, from)
+}
+
+pub(crate) fn revoke_membership_stage2(env: &Env, from: &Address) {
+    from.require_auth();
+    let members: Vec<Address> = get_members(env);
+    match find_if_revocable(from, &members) {
+        Ok(_result) => (),
+        Err(error) => panic!("{}", error),
+    }
+    token_operation::bring_back_tokens_to_admin_stage2(env, from)
+}
+
+pub(crate) fn revoke_membership_stage3(env: &Env, from: &Address) {
     let mut members: Vec<Address> = get_members(env);
 
-    let index;
-
-    match members.first_index_of(from) {
-        Some(i) => index = i,
-        None => {
-            panic!("You are trying to remove an account that doesn't belong to your organization")
-        }
-    }
+    let index: u32 = match find_if_revocable(from, &members) {
+        Ok(result) => result,
+        Err(error) => panic!("{}", error),
+    };
 
     from.require_auth();
     members.remove(index);
     let key: DataKey = DataKey::Members;
     env.storage().set(&key, &members);
 
-    token_operation::bring_back_tokens_to_admin(env, from)
+    token_operation::bring_back_tokens_to_admin_stage3(env, from)
 }
 
 pub(crate) fn get_members<
@@ -52,4 +71,11 @@ pub(crate) fn get_members<
 pub(crate) fn is_member(env: &Env, to: &Address) -> bool {
     let members: Vec<Address> = get_members(env);
     members.contains(to)
+}
+
+fn find_if_revocable<'a>(from: &'a Address, members: &'a Vec<Address>) -> Result<u32, &'a str> {
+    match members.first_index_of(from) {
+        Some(i) => Ok(i),
+        None => Err("The user account you're trying to revoke doesn't belong to the organization"),
+    }
 }
