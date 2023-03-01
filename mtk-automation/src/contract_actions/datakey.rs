@@ -12,4 +12,5 @@ pub enum DataKey {
     Offsets,
     Members,
     AllowedF, //Funds allowed for distribution
+    ExId,     //Exchange contract identification
 }
