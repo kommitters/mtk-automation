@@ -2,25 +2,24 @@
 
 [![License badge](https://img.shields.io/hexpm/l/kadena?style=for-the-badge)](https://github.com/kommitters/kadena.ex/blob/main/LICENSE)
 
-A smart contract written in Soroban to reward members of an organization who perform meaningful tasks.
+A smart contract written in Soroban to offset members of an organization who perform meaningful tasks.
 
 ## Contract workflow
 1. Generate an admin account.
 2. Create and initialize the stellar token. This step relies on the built-in token contract.
     > **Note** The initialization for the token contract must be skipped if the token already exists in the stellar network.
-3. Initialize the organization contract with your custom rewards.
-4. Generate a signature to fund the organization's token balance using the administrator's account.
-5. Fund the balance of the contract using the previously generated signature.
+3. Initialize the `exchange_token` contract with your prices and the `sell`/`buy` token contract id.
+4. Mint the contract with the quantity of `sell` token you want to exchange.
+5. Initialize the organization contract with your custom offsets.
 6. Add members to the organization.
-7. Create a signature to enable token transfer for the accounts.
-    > **Note** A signature is required for each transfer transaction.
-8. Reward members.
+7. Offset members.
 
-> **Note** Signatures are required to execute any functions involving calls to **privileged functions** of the token contract. [Token Contract Interface](https://soroban.stellar.org/docs/common-interfaces/token).
+> **Note** The Secret key of the account is the one that verifies if the transactions are allowed to be executed by the `invoker` of the contract.
 
 ## Revoke membership
-1. Approve the transaction using the token contract.
-2. Transfer the balance to the organization by revoking the membership.
+1. For this, the member approves the transaction being the `invoker` (setting his secret key when calling the revoke function).
+2. Trade the member balance an return the tokens to the organization by "swapping" the token with any other(ideally a stable one).
+3. Revoke the membership.
 
 ## Setup
 For setting up your environment, visit: [Soroban setup](https://soroban.stellar.org/docs/getting-started/setup)
@@ -91,7 +90,7 @@ soroban contract invoke \
     --amount 1000
 ```
 
-4. Initialize the organization contract with your custom rewards.
+4. Initialize the organization contract with your custom offsets.
 
 ``` 
 soroban contract invoke \
@@ -179,7 +178,7 @@ soroban contract invoke \
 
 ### Additional commands
 
-#### **token_exchange**
+#### **token_exchange contract**
 
 1. To retrieve the balance of any token in the contract
 ```
@@ -238,7 +237,7 @@ soroban contract invoke \
     --get_offer
 ```
 
-#### **mtk_automation**
+#### **mtk_automation contract**
 
 1. To retrieve the members that are in the organization 
 ```
