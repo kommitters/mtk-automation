@@ -76,7 +76,7 @@ sucess
 <mtk_automation_id>
 ```
 
-5. Initialize the `token_exchange` contract with your exchange tokens(those you created in step `#2`) and exchange prices.
+6. Initialize the `token_exchange` contract with your exchange tokens(those you created in step `#2`) and exchange prices.
 
 ```
 soroban contract invoke \
@@ -107,7 +107,7 @@ soroban contract invoke \
     --amount 1000
 ```
 
-6. Initialize the organization contract with your custom offsets.
+7. Initialize the organization contract with your custom offsets.
     > Note that the `<buy-token-contract-id>` is the token that we want to use to offset the members 
 
 ``` 
@@ -128,7 +128,7 @@ soroban contract invoke \
 
 ```
 
-7. Add a member 
+8. Add a member 
     > You can create the member in the same way as you did the admin in the stellar laboratory.
 ```
 soroban contract invoke \
@@ -144,7 +144,7 @@ soroban contract invoke \
 
 ```
 
-8. Offset a member 
+9. Offset a member 
 ``` 
 soroban contract invoke \
     --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
@@ -160,7 +160,9 @@ soroban contract invoke \
 
 ```
 
-9. Revoke a member (this was done in three stages because the `CLI` isn't currently working with multiple signature functions).
+10. Revoke a member (this was done in three stages because the `CLI` isn't currently working with multiple signature functions).
+
+- Stage 1 the contract claims the balance of the member 
 ```
 soroban contract invoke \
     --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
@@ -168,27 +170,32 @@ soroban contract invoke \
     --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
     --network-passphrase 'Test SDF Future Network ; October 2022' \
     --id <mtk_automation_id> \
-    --fn revoke_m1 \
+    --fn revoke_s1 \
     -- \
     --from <member-public-key>
+```
+- Stage 2 the contract pays the calculated amount to the member 
 
+```
 soroban contract invoke \
     --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
     --secret-key <member-secret-key> \
     --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
     --network-passphrase 'Test SDF Future Network ; October 2022' \
     --id <mtk_automation_id> \
-    --fn revoke_m2 \
+    --fn revoke_s2 \
     -- \
     --from <member-public-key>
-
+```
+- Stage 3 the contract transfer to the admin the balance of the organization token 
+```
 soroban contract invoke \
     --wasm target/wasm32-unknown-unknown/release/mtk_automation.wasm \
     --secret-key <member-secret-key> \
     --rpc-url https://horizon-futurenet.stellar.cash:443/soroban/rpc \
     --network-passphrase 'Test SDF Future Network ; October 2022' \
     --id <mtk_automation_id> \
-    --fn revoke_m3 \
+    --fn revoke_s3 \
     -- \
     --from <member-public-key>
 
